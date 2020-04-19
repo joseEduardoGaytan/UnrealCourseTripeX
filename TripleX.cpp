@@ -1,6 +1,8 @@
 // #include - Preposessor direcive instruction to the compiler used to include a library before compiling
 // we tell the compiler to include a library
 #include <iostream>
+#include <ctime>
+
 
 // We need to set the function declaration before we are going to call it!
 void PrintIntroduction(int LevelDifficulty)
@@ -10,26 +12,30 @@ void PrintIntroduction(int LevelDifficulty)
     std::cout << "Enter the correct code to continue...\n\n";
 }
 
-void PrintResults(bool bLevelComplete)
+void PrintLevelResults(bool bLevelComplete)
 {
-    if (bLevelComplete)
+    if(bLevelComplete)
     {
-        std::cout << "Congratulations you win!!\n";
+        std::cout << "Well done agent! You have extracted a file! Keep going! \n";
     }
     else
     {
-        std::cout << "Oh no! you didn't guess. You are a loser :(\n";
+        std::cout << "Oh no! you entered the worng code! Careful agent! Try again! \n";
     }      
 }
 
 bool PlayGame(int LevelDifficulty)
-{
+{    
     PrintIntroduction(LevelDifficulty);
     
     // Declaration statement, for out three code numbers
-    const int CodeA = 4;
-    const int CodeB = 3;
-    const int CodeC = 2;
+    // Randomize the number
+    int LevelDifficultyFactor = LevelDifficulty * 2;
+    LevelDifficultyFactor = LevelDifficultyFactor < 10 ? LevelDifficultyFactor : 9;
+
+    const int CodeA = rand() % LevelDifficultyFactor + 1;
+    const int CodeB = rand() % LevelDifficultyFactor + 1;
+    const int CodeC = rand() % LevelDifficultyFactor + 1;
 
     int CodeSum = CodeA + CodeB + CodeC;
     int CodeProduct = CodeA * CodeB * CodeC;
@@ -55,25 +61,32 @@ bool PlayGame(int LevelDifficulty)
 }
 
 int main()
-{   
+{       
+
+    srand(time(NULL)); // Create a new random sequence based on time of day
+
+    const int MaxDifficulty = 5;
     int LevelDifficulty = 1; 
 
     // Call PlayGame
-    while (true)
+    // Loop game until all the levels are completed
+    while(LevelDifficulty <= MaxDifficulty)
     {
         bool bLevelComplete = PlayGame(LevelDifficulty);
 
         std::cin.clear(); // Clears any errors
         std::cin.ignore(); // Discards the buffer          
 
-        PrintResults(bLevelComplete); 
+        PrintLevelResults(bLevelComplete); 
 
-        if (bLevelComplete)
+        if(bLevelComplete)
         {
             LevelDifficulty++;
         }        
 
     }
+
+    std::cout << "\n*** Great work agent! You got all the files! Now get out of there! ***";
     
     return 0;
 }
